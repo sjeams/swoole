@@ -11,6 +11,8 @@ $ws = new swoole_websocket_server("0.0.0.0", 9501);
 $ws->set(
     array(
         'worker_num' => 1,
+        'daemonize'     => 1,  // 作为守护进程运行，需同时设置log_file
+        'log_file'      => './logs/swoole.log',  // 指定标准输出和错误日志文件
     )
 );
 //打开websocket连接事件
