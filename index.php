@@ -5,6 +5,14 @@ class swooleServer
     public function __construct()
     {
         $this->server = new swoole_websocket_server("0.0.0.0", 9501);
+        $this->server->set(
+            array(
+                'worker_num' => 1,
+                'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
+                'log_file'   => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
+
+            )
+        );
     }
 
     public function go()
@@ -78,6 +86,9 @@ $ser->go();
 // $ws->set(
 //     array(
 //         'worker_num' => 1,
+// 'daemonize'     => 1,  // 作为守护进程运行，需同时设置log_file
+// 'log_file'      => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
+
 //     )
 // );
 
