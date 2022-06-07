@@ -1,14 +1,9 @@
+
 <?php
 /*
  * @Author: sjeam
  * @Date: 2022-06-07 10:09:21
  * @Description: 
- */
-/**
- * Created by PhpStorm.
- * User: 印第安老斑鸠
- * Date: 2019/2/14
- * Time: 10:30
  */
 $server = new  swoole_websocket_server("0.0.0.0",9501);
 $server->set(array(
@@ -16,6 +11,7 @@ $server->set(array(
 ));
 $redis = new redis();
 $redis->connect('124.221.174.216', 6379);
+$redis->auth('yincan1993');
 $server->on('open', function (Swoole\WebSocket\Server $server, $request) {});
 $server->on('message', function (Swoole\WebSocket\Server $server, $frame) use ($redis){
     //将任务安装时间丢进redis的有序集合之中（实际上要同步存进数据库）
@@ -36,4 +32,4 @@ $server->on('message', function (Swoole\WebSocket\Server $server, $frame) use ($
 $server->on('close', function ($ser, $fd) {
     echo "client {$fd} closed\n";
 });
-$server->start();
+$server->start(); 

@@ -1,4 +1,7 @@
 <?php
+ $expireTime = mktime(23, 59, 59, date("m"), date("d"), date("Y"));
+ echo  date('Y-m-d H:i:s',$expireTime);die;
+
 $clientFds = array();
 //创建websocket服务器对象，监听0.0.0.0:9501端口
 $ws = new swoole_websocket_server("0.0.0.0", 9501);
