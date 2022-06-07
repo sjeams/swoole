@@ -1,9 +1,3 @@
-
-/*
- * @Author: sjeam
- * @Date: 2022-06-07 15:40:29
- * @Description: 
- */
 <?php
 $ws = new swoole_websocket_server("0.0.0.0", 9501);
 $redis = new \Redis();
