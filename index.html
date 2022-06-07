@@ -1,76 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<div>
-    用户1：
-</div>
-<div>
-    <div>
-
-    </div>
-    <div>
-        <div>展示内容</div>
-        <div class="show_conten"></div>
-    </div>
-</div>
-<div>
-    <input type="text" name="text_val" value="" class="val">
-    <button class="btn">提交</button>
-</div>
-</body>
-</html>
-<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript">
-
-    var wsUrl = "ws://laravelim.net:9501";
-    var websocket = new WebSocket(wsUrl);
-
-    $(function () {
-        $('.btn').click(function () {
-            var val = $('.val').val();
-            if(val.length < 1) {
-                return false;
-            }
-            websocket.send(val);
-            $('.val').val('');
-
-        });
-        // 实例对象 onopen
-        websocket.onopen = function(evt) {
-            console.log('contected-success');
-        };
-
-        // onmessage
-        websocket.onmessage = function(evt) {
-            console.log('return_data',evt);
-            var data1 = evt.data;
-            var data = $.parseJSON(data1);
-            var html = '<p>用户'+ data.on +'：'+ data.msg +'</p>';
-            $('.show_conten').append(html);
-        };
-
-        // onclose
-        websocket.onclose = function(evt) {
-            console.log('关闭');
-        }
-
-        // onerror
-        websocket.onerror = function(evt) {
-            console.log('error',evt);
-        }
-    })
-
-</script>
-
-
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -127,4 +55,4 @@ function send() {
 
     document.getElementById("textarea").value = "";
 }
-</script> -->
+</script>
