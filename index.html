@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket聊天室</title>
+</head>
+<body>
+    聊天窗口：
+    <div id="main" style="width:600px;height: 300px; overflow: auto;border: solid 2px black;">
+    </div>
+    <textarea id="textarea" placeholder="在这里输入信息"></textarea>
+    <br />
+    <input type="button" value="发送聊天" onclick="send()">
+</body>
+</html>
+
+<script type="text/javascript">
+
+var myDate = new Date();
+var name = prompt("请输入您的昵称", "");
+var main = document.getElementById("main");
+
+var wsServer = 'ws://124.221.174.216:9501';
+
+var websocket = new WebSocket(wsServer);
+
+websocket.onopen = function (evt) {
+    console.log("连接成功.");
+};
+
+websocket.onclose = function (evt) {
+    console.log("连接已关闭...");
+};
+
+websocket.onmessage = function (evt) {
+
+    var data = evt.data;
+
+    console.log("收到 socket server 消息，内容：" + data);
+
+    main.innerHTML += data + "<br />";
+};
+
+websocket.onerror = function (evt, e) {
+    console.log('Error occured: ' + evt.data);
+};
+
+function send() {
+    var data = document.getElementById("textarea").value;
+    if (data === "") {
+        alert("不能发送空信息");
+        return false;
+    }
+    websocket.send(name + "：" + data);
+
+    document.getElementById("textarea").value = "";
+}
+</script>
