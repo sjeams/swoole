@@ -1,6 +1,6 @@
 <?php
  
-require_once __DIR__ . './libs/RedisLib.php';
+require_once __DIR__ . '/libs/RedisLib.php';
  
 //聊天内容
 $chatMessagesKey = "swoole:message:%s";
