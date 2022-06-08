@@ -14,8 +14,11 @@ $server = new swoole_websocket_server("0.0.0.0", 9501);
  
 $server->set([
     // 虚拟目录的只想位置，只针对静态的资源  html css js 图片 视频
-    'document_root' => '/www/wwwroot/swoole_1909a/web', // v4.4.0以下版本, 此处必须为绝对路径
+    'document_root' =>__DIR__.'', // v4.4.0以下版本, 此处必须为绝对路径
     'enable_static_handler' => true,
+	'worker_num' => 2,
+	'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
+	'log_file'   => __DIR__ . './log/swoole.log',  // 指定标准输出和错误日志文件
 ]);
  
 $server->on('Request', function ($request, $response) {
