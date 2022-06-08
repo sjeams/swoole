@@ -1,5 +1,5 @@
 <?php
-defined('SWOOLE_SERVER') OR define('SWOOLE_SERVER','124.221.174.216');
+defined('SWOOLE_SERVER') OR define('SWOOLE_SERVER','0.0.0.0');
  
 // 面向过程编程
 // 使用文件缓存  获取用户在线数
