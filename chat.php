@@ -3,7 +3,7 @@
 require(__DIR__ . '/libs/RedisLib.php');
 // RedisLib::getInstance()->hSet($roomOnlinesKey, $request->fd, $fid);
 $contents = RedisLib::getInstance()->lRange($chatMessagesKey, 0, -1);
- var_dump(__DIR__ . '/libs/RedisLib.php');
+//  var_dump(__DIR__ . '/libs/RedisLib.php');
 
  var_dump($contents);
  die;

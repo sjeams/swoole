@@ -8,6 +8,11 @@ class RedisLib
         $redis = new Redis();
         $redis->connect('124.221.174.216', 6379);
         $redis->auth('yincan1993');
+
+        $contents = $redis->lRange($chatMessagesKey, 0, -1);
+        //  var_dump(__DIR__ . '/libs/RedisLib.php');
+
+        var_dump($contents);die;
         // self::$_instance = new Redis();
         // self::$_instance->connect('124.221.174.216', 6379,'5');
         // self::$_instance->auth('yincan1993');
