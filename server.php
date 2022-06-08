@@ -39,7 +39,7 @@ setIncOnlineUserNum('init');
 $ws = new swoole_websocket_server(SWOOLE_SERVER, 9501);
 $ws->set(
     array(
-        'worker_num' => 1,
+        'worker_num' => 2,
         'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
         'log_file'   => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
     )
