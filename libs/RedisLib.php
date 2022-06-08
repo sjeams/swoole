@@ -5,9 +5,9 @@ class RedisLib
 {
     private static $_instance = null;
     private function __construct(){
-        self::$_instance = new \Redis();
+        self::$_instance = new Redis();
         // self::$_instance->connect('127.0.0.1','6379','5');
-        self::$_instance->connect('124.221.174.216', 6379,'5');
+        self::$_instance->connect('124.221.174.216', 6379);
         self::$_instance->auth('yincan1993');
     }
     private function __clone(){}
@@ -184,12 +184,12 @@ class RedisLib
  
     public static function insertAfter($key, $pivot, $value)
     {
-        return self::getInstance()->lInsert($key, \Redis::AFTER, $pivot, $value);
+        return self::getInstance()->lInsert($key, Redis::AFTER, $pivot, $value);
     }
  
     public static function insertBefore($key, $pivot, $value)
     {
-        return self::getInstance()->lInsert($key, \Redis::BEFORE, $pivot, $value);
+        return self::getInstance()->lInsert($key, Redis::BEFORE, $pivot, $value);
     }
  
     public static function getListSize($key)
