@@ -8,6 +8,7 @@
  $redis->hSet($chatMessagesKey,$tid,'hellow');
  echo  $redis->hGet($chatMessagesKey,$tid);
  $contents = $redis->lRange($chatMessagesKey, 0, -1);
+ $contents =json_decode($content, true);
  var_dump($contents);
  die;
 
