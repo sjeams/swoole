@@ -1,35 +1,125 @@
-
 <?php
-/*
- * @Author: sjeam
- * @Date: 2022-06-07 10:09:21
- * @Description: 
+defined('SWOOLE_SERVER') OR define('SWOOLE_SERVER','124.221.174.216');
+ 
+// 面向过程编程
+// 使用文件缓存  获取用户在线数
+function getOnlineUserNum(){
+	$data = file_get_contents('./chat/user_num.txt');
+	return $data;
+}
+// 使用文件缓存 增加用户在线数
+function setIncOnlineUserNum($type = null){
+	if($type == 'init'){
+		$num = 0;
+	}else{
+		$num = getOnlineUserNum() + 1;
+	}
+	file_put_contents('./chat/user_num.txt',$num);
+	return $num;
+}
+// 使用文件缓存 减少用户在线数
+function setDecOnlineUserNum($type = null){
+	if($type == 'init'){
+		$num = 0;
+	}else{
+		$num = getOnlineUserNum() - 1;
+	}
+	file_put_contents('./chat/user_num.txt',$num);
+	return $num;
+}
+ 
+ 
+ 
+/**
+ * WebSocket 服务器
  */
-$server = new  swoole_websocket_server("0.0.0.0",9501);
-$server->set(array(
-    'worker_num'=>2,
-));
-$redis = new redis();
-$redis->connect('124.221.174.216', 6379);
-$redis->auth('yincan1993');
-$server->on('open', function (Swoole\WebSocket\Server $server, $request) {});
-$server->on('message', function (Swoole\WebSocket\Server $server, $frame) use ($redis){
-    //将任务安装时间丢进redis的有序集合之中（实际上要同步存进数据库）
-    $result = $redis->zAdd('queue',microtime(true),'用户user'.time());
-    if ($result){
-        swoole_timer_after($frame->data,function () use($frame,$server){
-            //做异常捕获，失败的话就通知失败
-            try{
-                $str = "你好，你在".(($frame->data)/1000).'秒前的预定的套餐，请到店内柜台前拿取';
-                $server->push($frame->fd,$str);
-            }catch (Exception $exception){
-                $server->push($frame->fd,'订单失败');
-            }
-        });
+setIncOnlineUserNum('init');
+ 
+//创建websocket服务器对象，监听0.0.0.0:9502端口
+$ws = new Swoole\WebSocket\Server(SWOOLE_SERVER, 9501);
+ 
+//监听WebSocket连接打开事件
+$ws->on('open', function ($ws, $request) {
+	echo 'WS-'.$request->fd . ' connected. '.PHP_EOL;
+	
+	$num = setIncOnlineUserNum();
+	
+	foreach ($ws->connections as $fd) {
+        // 判断websocket连接是否正确，否则会push失败
+        if($request->fd == $fd){
+			$data = [
+				'num' => $num,
+				'msg' => $request->fd.' 进入了聊天室',
+				'fd' => $request->fd,
+				'type' => 'USER_IN'
+			];
+			$ws->push($request->fd, json_encode($data));
+		}else{
+			$data = [
+				'num' => $num,
+				'msg' => $request->fd.' 进入了聊天室',
+				'type' => 'USER_IN'
+			];
+			if ($ws->isEstablished($fd)) {
+				$ws->push($fd, json_encode($data));
+			}
+		}
     }
-    $server->push($frame->fd,"支付成功。请稍后,接收通知!");
 });
-$server->on('close', function ($ser, $fd) {
-    echo "client {$fd} closed\n";
+ 
+//监听WebSocket消息事件
+$ws->on('message', function ($ws, $frame) {
+    echo "Receive Message: {$frame->data}\n";
+	
+	foreach ($ws->connections as $item_fd) {
+		if($item_fd != $frame->fd){
+			$data = [
+				//'num' => $num,
+				'msg' => $frame->data,
+				'type' => 'USER_MSG',
+				'from_fd' => $frame->fd
+			];
+			
+			// 判断websocket连接是否正确，否则会push失败
+			if ($ws->isEstablished($item_fd)) {
+				$ws->push($item_fd, json_encode($data));
+			}
+		}else{
+			$data = [
+				//'num' => $num,
+				'msg' => $frame->data,
+				'type' => 'USER_MSG',
+				'from_fd' => $frame->fd
+			];
+			$ws->push($frame->fd, json_encode($data));
+		}
+    }
+	
 });
-$server->start(); 
+ 
+//监听WebSocket连接关闭事件
+$ws->on('close', function ($ws, $fd) {
+    echo "WS-{$fd} is closed.".PHP_EOL;
+	
+	$num = setDecOnlineUserNum();
+	$data = [
+		'num' => $num,
+		'msg' => $fd.' 离开了聊天室',
+		'type' => 'USER_OUT'
+	];
+	
+	foreach ($ws->connections as $item_fd) {
+		// 推送给除自己之外的所有人
+		if($item_fd != $fd){
+			// 判断websocket连接是否正确，否则会push失败
+			if ($ws->isEstablished($item_fd)) {
+				$ws->push($item_fd, json_encode($data));
+			}
+		}
+    }
+	
+	echo "当前在线人员有：".$num . PHP_EOL;
+	
+});
+ 
+$ws->start();
