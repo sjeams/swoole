@@ -6,6 +6,7 @@
  $chatMessagesKey = "swoole:message:123";
  $tid='123';
  $redis->hSet($chatMessagesKey,$tid,'hellow');
+ echo  $redis->hGet($chatMessagesKey,$tid);
  $contents = $redis->lRange($chatMessagesKey, 0, -1);
  var_dump($contents);
  die;
