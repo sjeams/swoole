@@ -36,17 +36,17 @@ $server->on('open', function (swoole_websocket_server $server, $request) use ($c
     if($fid && $type) {
  
         //存储在线用户
-        RedisLib::getInstance()->getRedis()->hSet($roomOnlinesKey, $request->fd, $fid);
+        RedisLib::getInstance()->hSet($roomOnlinesKey, $request->fd, $fid);
  
         //咨询问题
         if($type == 'ask') {
             $roomUserKey = sprintf($roomUserKey, $fid);
             $chatMessagesKey = sprintf($chatMessagesKey, $fid);
             //上线进入某个房间
-            RedisLib::getInstance()->getRedis()->hSet($roomUserKey, $fid, $request->fd);
+            RedisLib::getInstance()->hSet($roomUserKey, $fid, $request->fd);
             //历史聊天内容
             $data = [];
-            $contents = RedisLib::getInstance()->getRedis()->lRange($chatMessagesKey, 0, -1);
+            $contents = RedisLib::getInstance()->lRange($chatMessagesKey, 0, -1);
  
             if($contents) {
                 foreach ($contents as $content) {
@@ -67,10 +67,10 @@ $server->on('open', function (swoole_websocket_server $server, $request) use ($c
             //上线进入某个房间
             $roomUserKey = sprintf($roomUserKey, $tid);
             $chatMessagesKey = sprintf($chatMessagesKey, $tid);
-            RedisLib::getInstance()->getRedis()->hSet($roomUserKey, $tid, $request->fd);
+            RedisLib::getInstance()->hSet($roomUserKey, $tid, $request->fd);
  
             //历史聊天内容
-            $contents = RedisLib::getInstance()->getRedis()->lRange($chatMessagesKey, 0, -1);
+            $contents = RedisLib::getInstance()->lRange($chatMessagesKey, 0, -1);
             $data = [];
             if($contents) {
                 foreach ($contents as $content) {
@@ -111,7 +111,7 @@ $server->on('message', function (swoole_websocket_server $server, $frame) use ($
         }
  
         //保存聊天记录
-        RedisLib::getInstance()->getRedis()->rPush($chatMessagesKey, $frame->data);
+        RedisLib::getInstance()->rPush($chatMessagesKey, $frame->data);
  
         foreach ($server->connections as $key => $fd) {
             if($fd) {
@@ -129,8 +129,8 @@ $server->on('message', function (swoole_websocket_server $server, $frame) use ($
 $server->on('close', function ($ser, $fd) use($roomOnlinesKey) {
  
     //用户下线了
-    if(RedisLib::getInstance()->getRedis()->hExists($roomOnlinesKey, $fd)) {
-        RedisLib::getInstance()->getRedis()->hdel($roomOnlinesKey, $fd);
+    if(RedisLib::getInstance()->hExists($roomOnlinesKey, $fd)) {
+        RedisLib::getInstance()->hdel($roomOnlinesKey, $fd);
     }
  
     /*$is_websocket = $ser->getClientInfo($fd)['websocket_status'];
