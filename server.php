@@ -36,8 +36,14 @@ function setDecOnlineUserNum($type = null){
 setIncOnlineUserNum('init');
  
 //创建websocket服务器对象，监听0.0.0.0:9502端口
-$ws = new Swoole\WebSocket\Server(SWOOLE_SERVER, 9501);
- 
+$ws = new swoole_websocket_server(SWOOLE_SERVER, 9501);
+$ws->set(
+    array(
+        'worker_num' => 1,
+        'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
+        'log_file'   => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
+    )
+);
 //监听WebSocket连接打开事件
 $ws->on('open', function ($ws, $request) {
 	echo 'WS-'.$request->fd . ' connected. '.PHP_EOL;
