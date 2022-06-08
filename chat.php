@@ -4,6 +4,8 @@
  $redis->connect('124.221.174.216', 6379);
  $redis->auth('yincan1993');
  $chatMessagesKey = "swoole:message:123";
+ $tid=123;
+ RedisLib::getInstance()->hSet($chatMessagesKey, $tid, 'hellow');
  $contents = $redis->lRange($chatMessagesKey, 0, -1);
  var_dump($contents);
  die;
