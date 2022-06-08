@@ -1,5 +1,5 @@
 <?php
-namespace app\API\server;
+// namespace app\API\server;
  
 class RedisLib
 {
