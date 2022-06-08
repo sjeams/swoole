@@ -17,7 +17,7 @@ $server->set([
     'document_root' =>__DIR__.'', // v4.4.0以下版本, 此处必须为绝对路径
     'enable_static_handler' => true,
 	'worker_num' => 2,
-	// 'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
+	'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
 	'log_file'   => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
 ]);
  
