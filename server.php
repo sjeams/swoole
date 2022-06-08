@@ -4,7 +4,7 @@ defined('SWOOLE_SERVER') OR define('SWOOLE_SERVER','0.0.0.0');
 // 面向过程编程
 // 使用文件缓存  获取用户在线数
 function getOnlineUserNum(){
-	$data = file_get_contents('/chats/user_num.txt');
+	$data = file_get_contents('./chats/user_num.txt');
 	return $data;
 }
 // 使用文件缓存 增加用户在线数
@@ -14,7 +14,7 @@ function setIncOnlineUserNum($type = null){
 	}else{
 		$num = getOnlineUserNum() + 1;
 	}
-	file_put_contents('/chats/user_num.txt',$num);
+	file_put_contents('./chats/user_num.txt',$num);
 	return $num;
 }
 // 使用文件缓存 减少用户在线数
@@ -24,7 +24,7 @@ function setDecOnlineUserNum($type = null){
 	}else{
 		$num = getOnlineUserNum() - 1;
 	}
-	file_put_contents('/chats/user_num.txt',$num);
+	file_put_contents('./chats/user_num.txt',$num);
 	return $num;
 }
  
@@ -41,7 +41,7 @@ $ws->set(
     array(
         'worker_num' => 2,
         'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
-        'log_file'   => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
+        'log_file'   => __DIR__ . './log/swoole.log',  // 指定标准输出和错误日志文件
     )
 );
 //监听WebSocket连接打开事件
