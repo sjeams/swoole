@@ -8,7 +8,7 @@ class RedisLib
         $redis = new Redis();
         $redis->connect('124.221.174.216', 6379);
         $redis->auth('yincan1993');
-
+        $chatMessagesKey = "swoole:message:123";
         $contents = $redis->lRange($chatMessagesKey, 0, -1);
         //  var_dump(__DIR__ . '/libs/RedisLib.php');
 
