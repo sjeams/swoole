@@ -18,7 +18,7 @@ $server->set([
     'enable_static_handler' => true,
 	'worker_num' => 2,
 	'daemonize'  => 1,  // 作为守护进程运行，需同时设置log_file
-	'log_file'   => __DIR__ . './log/swoole.log',  // 指定标准输出和错误日志文件
+	'log_file'   => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
 ]);
  
 $server->on('Request', function ($request, $response) {
