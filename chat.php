@@ -4,11 +4,8 @@
  $redis->connect('124.221.174.216', 6379);
  $redis->auth('yincan1993');
  $chatMessagesKey = "swoole:message:123";
- $tid='123';
- $redis->hSet($chatMessagesKey,$tid,'hellow');
- echo  $redis->hGet($chatMessagesKey,$tid);
+ $redis->lPush($chatMessagesKey,'hellow');
  $contents = $redis->lRange($chatMessagesKey, 0, -1);
- $contents =json_decode($content, true);
  var_dump($contents);
  die;
 
