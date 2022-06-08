@@ -1,22 +1,7 @@
 <?php
  
- $redis = new Redis();
- $redis->connect('124.221.174.216', 6379);
- $redis->auth('yincan1993');
- $chatMessagesKey = "swoole:message:123";
- $redis->lPush($chatMessagesKey,'hellow');
- $contents = $redis->lRange($chatMessagesKey, 0, -1);
- var_dump($contents);
- die;
-
-
-require(__DIR__ . '/libs/RedisLib.php');
-// RedisLib::getInstance()->hSet($roomOnlinesKey, $request->fd, $fid);
-$contents = RedisLib::getInstance()->lRange($chatMessagesKey, 0, -1);
-//  var_dump(__DIR__ . '/libs/RedisLib.php');
-
- var_dump($contents);
- die;
+require_once(__DIR__ . '/libs/RedisLib.php');
+ 
 //聊天内容
 $chatMessagesKey = "swoole:message:%s";
 //房间用户
@@ -126,8 +111,8 @@ $server->on('message', function (swoole_websocket_server $server, $frame) use ($
         }
  
         //保存聊天记录
-        RedisLib::getInstance()->rPush($chatMessagesKey, $frame->data);
- 
+        RedisLib::getInstance()->lPush($chatMessagesKey, $frame->data);
+		// $redis->lPush($chatMessagesKey,'hellow');
         foreach ($server->connections as $key => $fd) {
             if($fd) {
                 $server->push($fd, $frame->data);
