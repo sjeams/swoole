@@ -1,10 +1,10 @@
 <?php
  
-require_once(__DIR__ . '/libs/RedisLib.php');
+require(__DIR__ . '/libs/RedisLib.php');
 // RedisLib::getInstance()->hSet($roomOnlinesKey, $request->fd, $fid);
 $contents = RedisLib::getInstance()->lRange($chatMessagesKey, 0, -1);
  var_dump(__DIR__ . '/libs/RedisLib.php');
- 
+
  var_dump($contents);
  die;
 //聊天内容

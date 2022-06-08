@@ -3,21 +3,23 @@
  
 class RedisLib
 {
-    private static $_instance = null;
+    private static $redis = null;
     private function __construct(){
-        self::$_instance = new Redis();
-        // self::$_instance->connect('127.0.0.1','6379','5');
-        self::$_instance->connect('124.221.174.216', 6379);
-        self::$_instance->auth('yincan1993');
+        $redis = new Redis();
+        $redis->connect('124.221.174.216', 6379);
+        $redis->auth('yincan1993');
+        // self::$_instance = new Redis();
+        // self::$_instance->connect('124.221.174.216', 6379,'5');
+        // self::$_instance->auth('yincan1993');
     }
     private function __clone(){}
  
     public static function getInstance(){
-        if(!self::$_instance){
-            new self;
-        }
- 
-        return self::$_instance;
+        // if(!self::$_instance){
+        //     new self;
+        // }
+        // return self::$_instance;
+        return self::$redis;
     }
  
     public static function setKeyValueArray($redisKey, $obj)
