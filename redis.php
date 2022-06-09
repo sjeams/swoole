@@ -12,7 +12,12 @@ $redis->connect('124.221.174.216', 6379);
 $redis->auth('yincan1993');
 $key='name';
 $value="test";
-$redis->set($key,$value);
+// $redis->set($key,$value);
+
+$redis->hSet('h', 'key1', 'hello'); 
+$data = $redis->lRange('h', 0, -1);
+var_dump($data);die;
+
 //$expireTime = mktime(23, 59, 59, date("m"), date("d"), date("Y"));
 //设置键的过期时间 1小时候
 $expreTime =strtotime('+1 hours ');
