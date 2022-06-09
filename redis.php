@@ -15,7 +15,9 @@ $value="test";
 // $redis->set($key,$value);
 // var_dump(11);die;
 $redis->hSet('h', 'key1', 'hello'); 
-$data = $redis->lRange('h', 0, -1);
+$redis->hSet('h', 'key1', '123');
+$redis->hSet('h', 'key2', 'hello');  
+$data = $redis->hGetAll('h', 0, -1);
 var_dump($data);die;
 
 //$expireTime = mktime(23, 59, 59, date("m"), date("d"), date("Y"));
