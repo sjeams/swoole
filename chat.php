@@ -57,7 +57,7 @@ $server->on('open', function (swoole_websocket_server $server, $request) use ($c
                 'type' => 'open',
                 'fid' => $fid,
                 'tid' => $tid,
-                'content' => asort($data)
+                'content' => ksort($data)
             ];
  
             $server->push($request->fd, json_encode($msg));
@@ -81,7 +81,7 @@ $server->on('open', function (swoole_websocket_server $server, $request) use ($c
                 'type' => 'open',
                 'fid' => $fid,
                 'tid' => $tid,
-                'content' => asort($data)
+                'content' => ksort($data)
             ];
  
             $server->push($request->fd, json_encode($msg));
