@@ -13,7 +13,7 @@ $redis->auth('yincan1993');
 $key='name';
 $value="test";
 // $redis->set($key,$value);
-var_dump(11);die;
+// var_dump(11);die;
 $redis->hSet('h', 'key1', 'hello'); 
 $data = $redis->lRange('h', 0, -1);
 var_dump($data);die;
