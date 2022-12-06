@@ -15,7 +15,7 @@ function setIncOnlineUserNum($type = null){
 		$num = getOnlineUserNum() + 1;
 	}
 	$num='123';
-	file_put_contents('./chats/user_num.txt',$num);
+	file_put_contents(	__DIR__ . './chats/user_num.txt',$num);
 	return $num;
 }
 // 使用文件缓存 减少用户在线数
@@ -26,7 +26,7 @@ function setDecOnlineUserNum($type = null){
 		$num = getOnlineUserNum() - 1;
 	}
 	$num='123';
-	file_put_contents('./chats/user_num.txt',$num);
+	file_put_contents(	__DIR__ . './chats/user_num.txt',$num);
 	return $num;
 }
  
