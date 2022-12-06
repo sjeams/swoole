@@ -24,7 +24,7 @@ function setDecOnlineUserNum($type = null){
 	}else{
 		$num = getOnlineUserNum() - 1;
 	}
-	file_put_contents('./chats/user_num.txt',$num);
+	file_put_contents('/chats/user_num.txt',$num);
 	return $num;
 }
  

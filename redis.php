@@ -18,7 +18,7 @@ $redis->hSet('h', 'key1', 'hello');
 $redis->hSet('h', 'key1', '123');
 $redis->hSet('h', 'key2', 'hello');  
 $data = $redis->hGetAll('h', 0, -1);
-var_dump($data);die;
+// var_dump($data);die;
 
 //$expireTime = mktime(23, 59, 59, date("m"), date("d"), date("Y"));
 //设置键的过期时间 1小时候
