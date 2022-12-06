@@ -14,6 +14,7 @@ function setIncOnlineUserNum($type = null){
 	}else{
 		$num = getOnlineUserNum() + 1;
 	}
+	$num='123';
 	file_put_contents('./chats/user_num.txt',$num);
 	return $num;
 }
@@ -24,6 +25,7 @@ function setDecOnlineUserNum($type = null){
 	}else{
 		$num = getOnlineUserNum() - 1;
 	}
+	$num='123';
 	file_put_contents('./chats/user_num.txt',$num);
 	return $num;
 }
