@@ -4,7 +4,7 @@ defined('SWOOLE_SERVER') OR define('SWOOLE_SERVER','0.0.0.0');
 // 面向过程编程
 // 使用文件缓存  获取用户在线数
 function getOnlineUserNum(){
-	$data = file_get_contents('/chats/user_num.txt');
+	$data = file_get_contents(	__DIR__ .'/chats/user_num.txt');
 	file_put_contents(	__DIR__ . '/chats/user_log.txt',$data);
 	return $data;
 }
