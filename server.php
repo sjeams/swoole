@@ -44,7 +44,7 @@ $ws->set(
 		'enable_static_handler' => true,
 		'heartbeat_check_interval' => 1800,//5秒侦测一次心跳，
 		'heartbeat_idle_time' => 1810,
-        'log_file'   => __DIR__ . './log/swoole.log',  // 指定标准输出和错误日志文件
+        'log_file'   => __DIR__ . '/log/swoole.log',  // 指定标准输出和错误日志文件
     )
 );
 
@@ -54,17 +54,18 @@ $ws->on('open', function ($ws, $request) {
 	echo 'WS-'.$request->fd . ' connected. '.PHP_EOL;
 	file_put_contents(	__DIR__ . '/chats/user_log.txt',$request);
 	$num = setIncOnlineUserNum();
+	$room_id =$request->get['room']; //房间号
 	foreach ($ws->connections as $fd) {
         // 判断websocket连接是否正确，否则会push失败
         if($request->fd == $fd){
+			//读取缓存
+			$content = getChatMessages($room_id);
 			$data = [
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
 				'fd' => $request->fd,
-				'room' => $request->room,
-				'request' => $request,
-				'ws' => $ws,
-				'content' => 123,
+				'room' =>$room_id,
+				'content' => $content,
 				'type' => 'USER_IN'
 			];
 			$ws->push($request->fd, json_encode($data));
@@ -86,6 +87,7 @@ $ws->on('open', function ($ws, $request) {
 //监听WebSocket消息事件
 $ws->on('message', function ($ws, $frame) {
     echo "Receive Message: {$frame->data}\n";
+	$room_id =$frame->get['room']; //房间号
 	foreach ($ws->connections as $item_fd) {
 		if($item_fd != $frame->fd){
 			$data = [
@@ -96,6 +98,8 @@ $ws->on('message', function ($ws, $frame) {
 			];
 			// 判断websocket连接是否正确，否则会push失败
 			if ($ws->isEstablished($item_fd)) {
+				//写入缓存
+				addChatMessages($room_id,$frame->data);
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
