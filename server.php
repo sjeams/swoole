@@ -14,10 +14,10 @@ function getChatMessages($room){
 	return $contents;
 }
 //写入聊天记录缓存
-function addChatMessages($room,$frame){
+function addChatMessages($room,$data){
 	$message = "message:".$room;
 	//历史聊天内容
-	RedisLib::getInstance()->lPush($message, $frame->data);
+	RedisLib::getInstance()->lPush($message,$data);
 }
 /**
  *   $room_id    当前房间id    
@@ -146,7 +146,7 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			addChatMessages($room_id,$frame);
+			addChatMessages($room_id,$frame->data);
 			$data = [
 				//'num' => $num,
 				'msg' => $frame->data,
