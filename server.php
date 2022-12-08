@@ -1,58 +1,6 @@
 <?php
-require_once(__DIR__ . '/libs/RedisLib.php');
-// //房间号
-// function room($room){
-// 	$room_id = implode('_',$room);
-// 	return $room_id;
-// }
-//读取聊天记录缓存-----------------
-function getChatMessages($room,$fd){
-	$message = "message_".$room;
-	$fd_room = "fd_".$room;
-	//fd绑定房间号
-	RedisLib::getInstance()->set($fd_room,$room);
-	//历史聊天内容
-	$contents = RedisLib::getInstance()->lRange($message, 0, -1);
-	//历史聊天内容
-	$data = [];
-	if($contents) {
-		foreach ($contents as $content) {
-			$data[] = json_decode($content, true);
-		}
-	}
-	return array_reverse($data);
-}
-//写入聊天记录缓存
-function addChatMessages($fd,$data){
-	$fd_room = "fd_".$fd;
-	$room = RedisLib::getInstance()->get($fd_room);
-	$message = "message_".$room;
-	//历史聊天内容
-	RedisLib::getInstance()->lPush($message,$data);
-}
-/**
- *   $room_id    当前房间id    
- */
-function get_push_room($room){
-	$room_id = "room_".$room;
-	// hset(name, key, value)
-	$fds = RedisLib::getInstance()->smembers($room_id);
-	return $fds;
-}
 
-function push_room($room,$fd){
-	$room_id = "room_".$room;
- 	$fd =RedisLib::getInstance()->sAdd($room_id,$fd);
-}
-
-function remove_fd($room,$fd){
-	$room_id = "room_".$room;
-    //用户下线了--删除元素
-	RedisLib::getInstance()->srem($room_id,$fd);
-}
-
-// require_once(__DIR__ . '/server_room.php');
-
+require_once(__DIR__ . '/server_room.php');
 // 面向过程编程
 // 使用文件缓存  获取用户在线数------------------
 function getOnlineUserNum(){
@@ -140,16 +88,16 @@ $ws->on('open', function ($ws, $request) {
 //监听WebSocket消息事件
 $ws->on('message', function ($ws, $frame) {
     echo "Receive Message_ {$frame->data}\n";
-	$room_id =$frame->get['room']; //房间号
+	// $room_id =$frame->get['room']; //房间号
+	$data =json_decode($frame->data);
 	foreach ($ws->connections as $item_fd) {
-
 		if($item_fd != $frame->fd){
 			$data = [
 				//'num' => $num,
-				'msg' => $frame->data,
+				'msg' => $data['msg'],
 				'type' => 'USER_MSG',
 				'user' => 'friend',
-				'room' =>$room_id,
+				'room' =>$data['room_id'],
 				'from_fd' => $frame->fd
 			];
 			// 判断websocket连接是否正确，否则会push失败
@@ -159,16 +107,15 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			addChatMessages($frame->fd,$frame->data);
+			addChatMessages($data['room_id'],$data['msg']);
 			//保存聊天记录
 			// RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
 			$data = [
 				//'num' => $num,
-				'msg' => $frame->data,
+				'msg' => $data['msg'],
 				'type' => 'USER_MSG',
-				'user' => 'my',
-				'frame' => $frame,
-				'room' =>$room_id,
+				'user' => 'friend',
+				'room' =>$data['room_id'],
 				'from_fd' => $frame->fd
 			];
 			$ws->push($frame->fd, json_encode($data));
