@@ -149,7 +149,7 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			addChatMessages($data['room'],$data);
+			addChatMessages($data['room'],$frame->data);
 			//保存聊天记录
 			// RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
 			$data = [
