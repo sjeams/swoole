@@ -6,8 +6,11 @@ require_once(__DIR__ . '/libs/RedisLib.php');
 // 	return $room_id;
 // }
 //读取聊天记录缓存-----------------
-function getChatMessages($room){
+function getChatMessages($room,$fd){
 	$message = "message_".$room;
+	$fd_room = "fd_".$room;
+	//fd绑定房间号
+	RedisLib::getInstance()->set($fd_room,$room);
 	//历史聊天内容
 	$contents = RedisLib::getInstance()->lRange($message, 0, -1);
 	//历史聊天内容
@@ -20,7 +23,9 @@ function getChatMessages($room){
 	return array_reverse($data);
 }
 //写入聊天记录缓存
-function addChatMessages($room,$data){
+function addChatMessages($fd,$data){
+	$fd_room = "fd_".$fd;
+	$room = RedisLib::getInstance()->get($fd_room);
 	$message = "message_".$room;
 	//历史聊天内容
 	RedisLib::getInstance()->lPush($message,$data);
@@ -107,7 +112,7 @@ $ws->on('open', function ($ws, $request) {
         // 判断websocket连接是否正确，否则会push失败
         if($request->fd == $fd){
 			//读取缓存
-			$content = getChatMessages($room_id);
+			$content = getChatMessages($fd,$room_id);
 			$data = [
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
@@ -137,7 +142,7 @@ $ws->on('message', function ($ws, $frame) {
     echo "Receive Message_ {$frame->data}\n";
 	$room_id =$frame->get['room']; //房间号
 	foreach ($ws->connections as $item_fd) {
-		addChatMessages($room_id,$frame->data);
+
 		if($item_fd != $frame->fd){
 			$data = [
 				//'num' => $num,
@@ -145,8 +150,6 @@ $ws->on('message', function ($ws, $frame) {
 				'type' => 'USER_MSG',
 				'user' => 'friend',
 				'room' =>$room_id,
-				'frame' => $frame,
-				'ws' => $ws,
 				'from_fd' => $frame->fd
 			];
 			// 判断websocket连接是否正确，否则会push失败
@@ -156,7 +159,7 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-
+			addChatMessages($frame->fd,$frame->data);
 			//保存聊天记录
 			// RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
 			$data = [
@@ -165,7 +168,6 @@ $ws->on('message', function ($ws, $frame) {
 				'type' => 'USER_MSG',
 				'user' => 'my',
 				'frame' => $frame,
-				'ws' => $ws,
 				'room' =>$room_id,
 				'from_fd' => $frame->fd
 			];
