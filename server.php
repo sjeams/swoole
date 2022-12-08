@@ -101,7 +101,7 @@ $ws->on('open', function ($ws, $request) {
         // 判断websocket连接是否正确，否则会push失败
         if($request->fd == $fd){
 			//读取缓存
-			$content = getChatMessages($room_id);
+			$content = json_encode(getChatMessages($room_id));
 			$data = [
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
@@ -116,7 +116,7 @@ $ws->on('open', function ($ws, $request) {
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
 				'room' => $request->room,
-				'content' => '',
+				'content' => 'null',
 				'type' => 'USER_IN'
 			];
 			if ($ws->isEstablished($fd)) {
