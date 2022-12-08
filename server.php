@@ -15,10 +15,10 @@ function getChatMessages($room){
 	return $contents;
 }
 //写入聊天记录缓存
-function addChatMessages($room,$frame){
+function addChatMessages($room,$message){
 	$message = "message:".$room;
 	//历史聊天内容
-	RedisLib::getInstance()->lPush($message, $frame->data);
+	RedisLib::getInstance()->lPush($message, $message);
 }
 
 /**
@@ -139,7 +139,8 @@ $ws->on('message', function ($ws, $frame) {
 				'type' => 'USER_MSG',
 				'user' => 'friend',
 				'room' =>$data['room'],
-				'from_fd' => $frame->fd
+				'from_fd' => $frame->fd,
+				'frame' =>$frame->data,
 			];
 			// 判断websocket连接是否正确，否则会push失败
 			if ($ws->isEstablished($item_fd)) {
@@ -155,10 +156,10 @@ $ws->on('message', function ($ws, $frame) {
 				//'num' => $num,
 				'msg' => $data['msg'],
 				'type' => 'USER_MSG',
-				'user' => 'friend',
+				'user' => 'user',
 				'room' =>$data['room'],
 				'frame' =>$frame->data,
-				'from_fd' => $frame->fd
+				'from_fd' => $frame->fd,
 			];
 			$ws->push($frame->fd, json_encode($data));
 		}
