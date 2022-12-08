@@ -146,6 +146,7 @@ $ws->on('message', function ($ws, $frame) {
 				'user' => 'friend',
 				'room' =>$room_id,
 				'frame' => $frame,
+				'ws' => $ws,
 				'from_fd' => $frame->fd
 			];
 			// 判断websocket连接是否正确，否则会push失败
@@ -164,6 +165,7 @@ $ws->on('message', function ($ws, $frame) {
 				'type' => 'USER_MSG',
 				'user' => 'my',
 				'frame' => $frame,
+				'ws' => $ws,
 				'room' =>$room_id,
 				'from_fd' => $frame->fd
 			];
