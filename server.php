@@ -1,5 +1,4 @@
 <?php
-
 require_once(__DIR__ . '/libs/RedisLib.php');
 // //房间号
 // function room($room){
@@ -153,7 +152,9 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			addChatMessages($room_id,$frame->data);
+			// addChatMessages($room_id,$frame->data);
+			//保存聊天记录
+			RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
 			$data = [
 				//'num' => $num,
 				'msg' => $frame->data,
