@@ -15,10 +15,10 @@ function getChatMessages($room){
 	return $contents;
 }
 //写入聊天记录缓存
-function addChatMessages($room,$message){
+function addChatMessages($room,$msg){
 	$message = "message:".$room;
 	//历史聊天内容
-	RedisLib::getInstance()->lPush($message, $message);
+	RedisLib::getInstance()->lPush($message,$msg);
 }
 
 /**
@@ -149,7 +149,7 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			addChatMessages($data['room'],$data['msg']);
+			addChatMessages($data['room'],$data);
 			//保存聊天记录
 			// RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
 			$data = [
