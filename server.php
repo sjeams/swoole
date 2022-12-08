@@ -130,7 +130,7 @@ $ws->on('open', function ($ws, $request) {
 $ws->on('message', function ($ws, $frame) {
     echo "Receive Message_ {$frame->data}\n";
 	// $room_id =$frame->get['room']; //房间号
-	$data =json_decode($frame->data);
+	$data = json_decode($frame->data,true);
 	foreach ($ws->connections as $item_fd) {
 		if($item_fd != $frame->fd){
 			$data = [
@@ -138,7 +138,7 @@ $ws->on('message', function ($ws, $frame) {
 				'msg' => $data['msg'],
 				'type' => 'USER_MSG',
 				'user' => 'friend',
-				'room' =>$data['room_id'],
+				'room' =>$data['room'],
 				'from_fd' => $frame->fd
 			];
 			// 判断websocket连接是否正确，否则会push失败
@@ -148,7 +148,7 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			addChatMessages($data['room_id'],$data['msg']);
+			addChatMessages($data['room'],$data['msg']);
 			//保存聊天记录
 			// RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
 			$data = [
@@ -156,7 +156,8 @@ $ws->on('message', function ($ws, $frame) {
 				'msg' => $data['msg'],
 				'type' => 'USER_MSG',
 				'user' => 'friend',
-				'room' =>$data['room_id'],
+				'room' =>$data['room'],
+				'frame' =>$frame->data,
 				'from_fd' => $frame->fd
 			];
 			$ws->push($frame->fd, json_encode($data));
