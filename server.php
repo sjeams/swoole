@@ -94,19 +94,22 @@ $ws->on('message', function ($ws, $frame) {
 				//'num' => $num,
 				'msg' => $frame->data,
 				'type' => 'USER_MSG',
+				'user' => 'friend',
 				'from_fd' => $frame->fd
 			];
 			// 判断websocket连接是否正确，否则会push失败
 			if ($ws->isEstablished($item_fd)) {
 				//写入缓存
-				addChatMessages($room_id,$frame->data);
+			
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
+			addChatMessages($room_id,$frame->data);
 			$data = [
 				//'num' => $num,
 				'msg' => $frame->data,
 				'type' => 'USER_MSG',
+				'user' => 'my',
 				'from_fd' => $frame->fd
 			];
 			$ws->push($frame->fd, json_encode($data));
