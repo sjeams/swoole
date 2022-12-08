@@ -62,6 +62,8 @@ $ws->on('open', function ($ws, $request) {
 				'msg' => $request->fd.' 进入了聊天室',
 				'fd' => $request->fd,
 				'room' => $request->room,
+				'request' => $request,
+				'ws' => $ws,
 				'content' => 123,
 				'type' => 'USER_IN'
 			];
