@@ -137,12 +137,14 @@ $ws->on('message', function ($ws, $frame) {
     echo "Receive Message_ {$frame->data}\n";
 	$room_id =$frame->get['room']; //房间号
 	foreach ($ws->connections as $item_fd) {
+		addChatMessages($room_id,$frame->data);
 		if($item_fd != $frame->fd){
 			$data = [
 				//'num' => $num,
 				'msg' => $frame->data,
 				'type' => 'USER_MSG',
 				'user' => 'friend',
+				'room' =>$room_id,
 				'from_fd' => $frame->fd
 			];
 			// 判断websocket连接是否正确，否则会push失败
@@ -152,14 +154,15 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			// addChatMessages($room_id,$frame->data);
+
 			//保存聊天记录
-			RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
+			// RedisLib::getInstance()->lPush('room_'.$room_id, $frame->data);
 			$data = [
 				//'num' => $num,
 				'msg' => $frame->data,
 				'type' => 'USER_MSG',
 				'user' => 'my',
+				'room' =>$room_id,
 				'from_fd' => $frame->fd
 			];
 			$ws->push($frame->fd, json_encode($data));
