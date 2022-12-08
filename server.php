@@ -48,15 +48,11 @@ $ws->set(
     )
 );
 
-//监听链接事件
-$ws->on('connect', function ($ws, $request) {
-	file_put_contents(	__DIR__ . '/chats/user_log.txt',$request);
-	$ws->push($request->fd, json_encode($request));
-});
 
 //监听WebSocket连接打开事件
 $ws->on('open', function ($ws, $request) {
 	echo 'WS-'.$request->fd . ' connected. '.PHP_EOL;
+	file_put_contents(	__DIR__ . '/chats/user_log.txt',$request);
 	$num = setIncOnlineUserNum();
 	foreach ($ws->connections as $fd) {
         // 判断websocket连接是否正确，否则会push失败
@@ -65,6 +61,8 @@ $ws->on('open', function ($ws, $request) {
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
 				'fd' => $request->fd,
+				'room' => $request->room,
+				'content' => 123,
 				'type' => 'USER_IN'
 			];
 			$ws->push($request->fd, json_encode($data));
@@ -72,6 +70,8 @@ $ws->on('open', function ($ws, $request) {
 			$data = [
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
+				'room' => $request->room,
+				'content' => '',
 				'type' => 'USER_IN'
 			];
 			if ($ws->isEstablished($fd)) {
