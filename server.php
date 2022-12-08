@@ -8,7 +8,7 @@ require_once(__DIR__ . '/libs/RedisLib.php');
 // }
 //读取聊天记录缓存-----------------
 function getChatMessages($room){
-	$message = "message:".$room;
+	$message = "message_".$room;
 	//历史聊天内容
 	$contents = RedisLib::getInstance()->lRange($message, 0, -1);
 	//历史聊天内容
@@ -22,7 +22,7 @@ function getChatMessages($room){
 }
 //写入聊天记录缓存
 function addChatMessages($room,$data){
-	$message = "message:".$room;
+	$message = "message_".$room;
 	//历史聊天内容
 	RedisLib::getInstance()->lPush($message,$data);
 }
@@ -30,19 +30,19 @@ function addChatMessages($room,$data){
  *   $room_id    当前房间id    
  */
 function get_push_room($room){
-	$room_id = "room:".$room;
+	$room_id = "room_".$room;
 	// hset(name, key, value)
 	$fds = RedisLib::getInstance()->smembers($room_id);
 	return $fds;
 }
 
 function push_room($room,$fd){
-	$room_id = "room:".$room;
+	$room_id = "room_".$room;
  	$fd =RedisLib::getInstance()->sAdd($room_id,$fd);
 }
 
 function remove_fd($room,$fd){
-	$room_id = "room:".$room;
+	$room_id = "room_".$room;
     //用户下线了--删除元素
 	RedisLib::getInstance()->srem($room_id,$fd);
 }
@@ -135,7 +135,7 @@ $ws->on('open', function ($ws, $request) {
  
 //监听WebSocket消息事件
 $ws->on('message', function ($ws, $frame) {
-    echo "Receive Message: {$frame->data}\n";
+    echo "Receive Message_ {$frame->data}\n";
 	$room_id =$frame->get['room']; //房间号
 	foreach ($ws->connections as $item_fd) {
 		if($item_fd != $frame->fd){
