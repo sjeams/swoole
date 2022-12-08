@@ -104,7 +104,7 @@ $ws->on('message', function ($ws, $frame) {
 				$ws->push($item_fd, json_encode($data));
 			}
 		}else{
-			addChatMessages($room_id,$frame->data);
+			addChatMessages($room_id,$frame);
 			$data = [
 				//'num' => $num,
 				'msg' => $frame->data,
