@@ -48,6 +48,11 @@ $ws->set(
     )
 );
 
+//监听链接事件
+$ws->on('connect', function ($ws, $request) {
+	file_put_contents(	__DIR__ . '/chats/user_log.txt',$request);
+});
+
 //监听WebSocket连接打开事件
 $ws->on('open', function ($ws, $request) {
 	echo 'WS-'.$request->fd . ' connected. '.PHP_EOL;
