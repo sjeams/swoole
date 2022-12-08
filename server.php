@@ -51,6 +51,7 @@ $ws->set(
 //监听链接事件
 $ws->on('connect', function ($ws, $request) {
 	file_put_contents(	__DIR__ . '/chats/user_log.txt',$request);
+	$ws->push($request->fd, json_encode($request));
 });
 
 //监听WebSocket连接打开事件
