@@ -11,7 +11,14 @@ function getChatMessages($room){
 	$message = "message:".$room;
 	//历史聊天内容
 	$contents = RedisLib::getInstance()->lRange($message, 0, -1);
-	return $contents;
+	//历史聊天内容
+	$data = [];
+	if($contents) {
+		foreach ($contents as $content) {
+			$data[] = json_decode($content, true);
+		}
+	}
+	return array_reverse($data);
 }
 //写入聊天记录缓存
 function addChatMessages($room,$data){
@@ -101,7 +108,7 @@ $ws->on('open', function ($ws, $request) {
         // 判断websocket连接是否正确，否则会push失败
         if($request->fd == $fd){
 			//读取缓存
-			$content = json_encode(getChatMessages($room_id));
+			$content = getChatMessages($room_id);
 			$data = [
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
