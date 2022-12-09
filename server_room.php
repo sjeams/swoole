@@ -2,6 +2,7 @@
 <?php
 require_once(__DIR__ . '/libs/RedisLib.php');
 
+
 // //房间号
 // function room($room){
 // 	$room_id = implode('_',$room);
@@ -11,15 +12,21 @@ require_once(__DIR__ . '/libs/RedisLib.php');
 //读取聊天记录缓存-----------------
 function getChatMessages($room){
 	$message = "message:".$room;
+	$data = [];
 	//历史聊天内容
 	$contents = RedisLib::getInstance()->lRange($message, 0, -1);
-	return $contents;
+	if($contents) {
+		foreach ($contents as $content) {
+			$data[] = json_decode($content, true);
+		}
+	}
+	return array_reverse($data);
 }
 //写入聊天记录缓存
-function addChatMessages($room,$frame){
+function addChatMessages($room,$msg){
 	$message = "message:".$room;
 	//历史聊天内容
-	RedisLib::getInstance()->lPush($message, $frame->data);
+	RedisLib::getInstance()->lPush($message,$msg);
 }
 
 /**
@@ -42,6 +49,7 @@ function remove_fd($room,$fd){
     //用户下线了--删除元素
 	RedisLib::getInstance()->srem($room_id,$fd);
 }
+
 
  
  

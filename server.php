@@ -1,48 +1,7 @@
 <?php
-require_once(__DIR__ . '/libs/RedisLib.php');
-
-// //房间号
-// function room($room){
-// 	$room_id = implode('_',$room);
-// 	return $room_id;
-// }
-
-//读取聊天记录缓存-----------------
-function getChatMessages($room){
-	$message = "message:".$room;
-	//历史聊天内容
-	$contents = RedisLib::getInstance()->lRange($message, 0, -1);
-	return $contents;
-}
-//写入聊天记录缓存
-function addChatMessages($room,$msg){
-	$message = "message:".$room;
-	//历史聊天内容
-	RedisLib::getInstance()->lPush($message,$msg);
-}
-
-/**
- *   $room_id    当前房间id    
- */
-function get_push_room($room){
-	$room_id = "room:".$room;
-	// hset(name, key, value)
-	$fds = RedisLib::getInstance()->smembers($room_id);
-	return $fds;
-}
-
-function push_room($room,$fd){
-	$room_id = "room:".$room;
- 	$fd =RedisLib::getInstance()->sAdd($room_id,$fd);
-}
-
-function remove_fd($room,$fd){
-	$room_id = "room:".$room;
-    //用户下线了--删除元素
-	RedisLib::getInstance()->srem($room_id,$fd);
-}
-// require_once(__DIR__ . '/server_room.php');
-// 面向过程编程
+// require_once(__DIR__ . '/libs/RedisLib.php');
+require_once(__DIR__ . '/server_room.php');
+// 面向过程
 // 使用文件缓存  获取用户在线数------------------
 function getOnlineUserNum(){
 	$data = file_get_contents(	__DIR__ .'/chats/user_num.txt');
