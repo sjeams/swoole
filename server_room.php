@@ -29,26 +29,26 @@ function addChatMessages($room,$msg){
 	RedisLib::getInstance()->lPush($message,$msg);
 }
 
-/**
- *   $room_id    当前房间id    
- */
-function get_push_room($room){
-	$room_id = "room:".$room;
-	// hset(name, key, value)
-	$fds = RedisLib::getInstance()->smembers($room_id);
-	return $fds;
-}
+// /**
+//  *   $room_id    当前房间id    
+//  */
+// function get_push_room($room){
+// 	$room_id = "room:".$room;
+// 	// hset(name, key, value)
+// 	$fds = RedisLib::getInstance()->smembers($room_id);
+// 	return $fds;
+// }
 
-function push_room($room,$fd){
-	$room_id = "room:".$room;
- 	$fd =RedisLib::getInstance()->sAdd($room_id,$fd);
-}
+// function push_room($room,$fd){
+// 	$room_id = "room:".$room;
+//  	$fd =RedisLib::getInstance()->sAdd($room_id,$fd);
+// }
 
-function remove_fd($room,$fd){
-	$room_id = "room:".$room;
-    //用户下线了--删除元素
-	RedisLib::getInstance()->srem($room_id,$fd);
-}
+// function remove_fd($room,$fd){
+// 	$room_id = "room:".$room;
+//     //用户下线了--删除元素
+// 	RedisLib::getInstance()->srem($room_id,$fd);
+// }
 
 
  
