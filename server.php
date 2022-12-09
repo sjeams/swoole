@@ -56,6 +56,7 @@ $ws->on('open', function ($ws, $request) {
 	file_put_contents(	__DIR__ . '/chats/user_log.txt',$request);
 	$num = setIncOnlineUserNum();
 	$room_id =$request->get['room']; //房间号
+	$uid =$request->get['uid']; //当前用户id
 	foreach ($ws->connections as $fd) {
         // 判断websocket连接是否正确，否则会push失败
         if($request->fd == $fd){
@@ -66,6 +67,7 @@ $ws->on('open', function ($ws, $request) {
 				'msg' => $request->fd.' 进入了聊天室',
 				'fd' => $request->fd,
 				'room' =>$room_id,
+				'uid' =>$uid,
 				'content' => $content,
 				'type' => 'USER_IN'
 			];
@@ -75,6 +77,7 @@ $ws->on('open', function ($ws, $request) {
 				'num' => $num,
 				'msg' => $request->fd.' 进入了聊天室',
 				'room' => $request->room,
+				'uid' =>$uid,
 				'content' => 'null',
 				'type' => 'USER_IN'
 			];
