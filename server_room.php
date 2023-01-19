@@ -28,7 +28,17 @@ function addChatMessages($room,$msg){
 	//历史聊天内容
 	RedisLib::getInstance()->lPush($message,$msg);
 }
-
+// 清空聊天记录
+function removeChatMessages($room,$msg){
+	$message = "message:".$room;
+	$contents = RedisLib::getInstance()->lRange($message, 0, -1);
+	if($contents){
+		//存入文本
+		
+		//清空redis缓存
+		RedisLib::getInstance()->lpop($message);
+	}
+}
 // /**
 //  *   $room_id    当前房间id    
 //  */
