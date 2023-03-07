@@ -1,0 +1,245 @@
+.header_search{
+    height: 80rpx;
+    line-height: 80rpx;
+    width: 100%;
+    padding:0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ 
+.card_type{
+	display: inline-flex;
+/* 	flex-wrap: wrap;
+	justify-content: space-between;
+	display: contents; */
+}
+/* //滚动条样式 */
+    /* #ifndef APP-PLUS */
+    page {
+        width: 100%;
+        min-height: 100%;
+        display: flex;
+    }
+
+/* #endif */
+.tabs {
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #ffffff;
+    /* #ifndef APP-PLUS */
+    /* height: 100vh; */
+    /* #endif */
+}
+
+.scroll-h {
+    width: 750rpx;
+    /* #ifdef H5 */
+    width:100%;
+    /* #endif */
+    height: 80rpx;
+    flex-direction: row;
+    /* #ifndef APP-PLUS */
+    white-space: nowrap;
+    /* #endif */
+    /* flex-wrap: nowrap; */
+    border-color: #cccccc;
+    /* border-bottom-style: solid; */
+    border-bottom-width: 1px;
+}
+
+.line-h {
+    height: 1rpx;
+    background-color: #cccccc;
+}
+
+.uni-tab-item {
+    /* #ifndef APP-PLUS */
+    display: inline-block;
+    /* #endif */
+    flex-wrap: nowrap;
+    padding-left: 34rpx;
+    padding-right: 34rpx;
+}
+
+.uni-tab-item-title {
+    color: #555;
+    font-size: 28rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    flex-wrap: nowrap;
+    /* #ifndef APP-PLUS */
+    white-space: nowrap;
+    /* #endif */
+}
+
+.uni-tab-item-title-active {
+    color: #007AFF;
+    font-size: 36rpx;
+    font-weight: bold;
+}
+
+.swiper-box {
+    flex: 1;
+}
+
+.swiper-item {
+    flex: 1;
+    flex-direction: row;
+}
+
+.scroll-v {
+    flex: 1;
+    /* #ifndef MP-ALIPAY */
+    flex-direction: column;
+    /* #endif */
+    width: 750rpx;
+    width:100%;
+}
+
+.update-tips {
+    position: absolute;
+    left: 0;
+    top: 41px;
+    right: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /* background-color: #FDDD9B; */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.update-tips-text {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.refresh {
+    width: 750rpx;
+    width:100%;
+    height: 64px;
+    justify-content: center;
+}
+
+.refresh-view {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-icon {
+    width: 30px;
+    height: 30px;
+    transition-duration: .5s;
+    transition-property: transform;
+    transform: rotate(0deg);
+    transform-origin: 15px 15px;
+}
+
+.refresh-icon-active {
+    transform: rotate(180deg);
+}
+
+.loading-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    color: #999999;
+}
+
+.loading-text {
+    margin-left: 2px;
+    font-size: 16px;
+    color: #999999;
+}
+
+.loading-more {
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.loading-more-text {
+    font-size: 28rpx;
+    color: #999;
+}
+
+ /* 自适应布局 start*/
+	.card {
+        float: left ;
+		/* display: -webkit-inline-flex!important;
+		display: -ms-inline-flexbox!important; */
+		flex-direction:row;
+		flex-wrap: wrap;
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        justify-content: center ;
+        align-items: center;
+        flex-direction:row;
+        flex-wrap: wrap;
+	}
+	.box{
+
+        display: flex;
+        /* max-width: 800rpx; */
+        /* width: auto; */
+        /* max-width: 480rpx; */
+		/* height:355rpx; */
+        justify-content: center;
+		/* justify-content: center; */
+		/* align-items: center; */
+	}
+   /* 自适应布局 end*/  
+ 
+	.row-box{
+		width:200rpx;
+		height:200rpx;
+		margin:10rpx;
+		background-color: #DDDDDD;
+	}
+	.fill{
+		width:200rpx;
+		height:200rpx;
+		position: relative;
+		background-color: #03A9F4;
+		opacity: 0.5;
+	}
+	.row-rotate{
+		transition-duration:0.3s;
+		transform:rotate(0deg);
+	}
+	.rotate{
+		transition-duration:0.3s;
+		transform:rotate(45deg);
+	}
+	.row-scale{
+		transition-duration:0.3s;
+		transform:scale(1);
+	}
+	.scale{
+		transform:scale(2);
+	}
+	.row-translateX{
+		transition-duration:0.3s;
+		transform:translateX(0px);
+	}
+	.translateX{
+		transform:translateX(45px);
+	}
+	.row-translateY{
+		transition-duration:0.3s;
+		transform:translateY(0px);
+	}
+	.translateY{
+		transform:translateY(45px);
+	}
+ 

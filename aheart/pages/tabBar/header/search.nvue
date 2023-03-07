@@ -1,0 +1,224 @@
+// <script>
+// 	export default {
+// 		methods: {
+// 			goto(url) {
+// 				uni.navigateTo({
+// 					url:url
+// 				})
+// 			}
+// 		}
+// 	}
+// </script>
+<template>
+	<view class="container">
+	</view>
+		<view>
+			<navigator url="/pages/about/about"><button type="default">通过navigator组件跳转到about页面</button></navigator>
+			<button type="default" @click="goto('/pages/about/about')">通过方法跳转到about页面</button>
+			<button type="default" @click="navigateTo('/pages/about/about')">跳转到about页面</button><!-- 这种写法只有h5平台支持，不跨端，不推荐使用 -->
+		</view>
+<!-- 	<uni-nav-bar dark :fixed="true" shadow background-color="#007AFF" status-bar left-icon="left" left-text="返回"
+		title="自定义导航栏" @clickLeft="back" /> -->
+<!-- 		<uni-nav-bar    :fixed="true" shadow  background-color="#007AFF" status-bar    >
+			<block slot="left">
+				<view class="city">
+					<view>
+						<text class="uni-nav-bar-text">{{ city }}</text>
+					</view>
+					<uni-icons type="arrowdown" color="#666" size="18" />
+				</view>
+			</block>
+			<view class="input-view">
+				<uni-icons class="input-uni-icon" type="search" size="18" color="#999" />
+				<input confirm-type="search" class="nav-bar-input" type="text" placeholder="输入搜索关键词"
+				  clearButton="auto" cancelButton="none" @confirm="search" />
+			</view>
+			
+			<block slot="right">
+				<view class="city">
+					搜索
+				</view>
+			</block>
+			
+		</uni-nav-bar> -->
+		<uni-nav-bar leftWidth="0rpx" rightWidth="0rpx" height="160rpx"  :fixed="true" shadow  background-color="white" status-bar >
+			 <!-- right-text="搜索" @clickRight="search" -->
+			<uni-search-bar class=" header_search" radius="5" placeholder="输入搜索关键词" clearButton="auto" cancelButton="none" @confirm="search" />
+			<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
+				<view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
+					<text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
+				</view>
+			</scroll-view>
+		
+		</uni-nav-bar>
+
+</template>
+
+
+<script>
+	
+	export default {
+		components: {},
+		data() {
+			return {
+				city: '北京',
+				tabBars: [{
+				    name: '关注',
+				    id: 'guanzhu'
+				}, {
+				    name: '推荐',
+				    id: 'tuijian'
+				}, {
+				    name: '体育',
+				    id: 'tiyu'
+				}, {
+				    name: '热点',
+				    id: 'redian'
+				}, {
+				    name: '财经',
+				    id: 'caijing'
+				}, {
+				    name: '娱乐',
+				    id: 'yule'
+				}, {
+				    name: '军事',
+				    id: 'junshi'
+				}, {
+				    name: '历史',
+				    id: 'lishi'
+				}, {
+				    name: '本地',
+				    id: 'bendi'
+				}],
+			}
+		},
+		methods: {
+			back() {
+				uni.navigateBack({
+					delta: 1
+				})
+			},
+			showMenu() {
+				uni.showToast({
+					title: '菜单'
+				})
+			},
+			clickLeft() {
+				uni.showToast({
+					title: '左侧按钮'
+				})
+			},
+			search() {
+				uni.showToast({
+					title: '搜索'
+				})
+			},
+			showCity() {
+				uni.showToast({
+					title: '选择城市'
+				})
+			},
+			scan() {
+				uni.showToast({
+					title: '扫码'
+				})
+			},
+			confirm() {
+				uni.showToast({
+					title: '搜索'
+				})
+			}
+		},
+		onPullDownRefresh() {
+			console.log('onPullDownRefresh')
+			setTimeout(function() {
+				uni.stopPullDownRefresh()
+				console.log('stopPullDownRefresh')
+			}, 1000)
+		}
+	}
+</script>
+
+
+<style lang="scss">
+	.header_search{
+		display: inline-block;
+		width: 100%;
+	}
+ .scroll-h {
+     width: 750rpx;
+ 	/* #ifdef H5 */
+ 	width:100%;
+ 	/* #endif */
+ 	height: 80rpx;
+     flex-direction: row;
+     /* #ifndef APP-PLUS */
+     white-space: nowrap;
+     /* #endif */
+     /* flex-wrap: nowrap; */
+     /* border-color: #cccccc;
+ 	border-bottom-style: solid;
+ 	border-bottom-width: 1px; */
+ }
+ .uni-tab-item-title {
+     color: #555;
+     font-size: 30rpx;
+     height: 80rpx;
+     line-height: 80rpx;
+     flex-wrap: nowrap;
+     /* #ifndef APP-PLUS */
+     white-space: nowrap;
+     /* #endif */
+ }
+ 
+ .uni-tab-item-title-active {
+     color: #007AFF;
+ }
+	// $nav-height: 30px;
+	// .box-bg {
+	// 	background-color: #F5F5F5;
+	// 	padding: 5px 0;
+	// }
+
+	// .city {
+	// 	/* #ifndef APP-PLUS-NVUE */
+	// 	display: flex;
+	// 	/* #endif */
+	// 	flex-direction: row;
+	// 	align-items: center;
+	// 	justify-content: flex-start;
+	// 	// width: 160rpx;
+	// 	margin-left: 4px;
+	// }
+
+	// .input-view {
+	// 	/* #ifndef APP-PLUS-NVUE */
+	// 	display: flex;
+	// 	/* #endif */
+	// 	flex-direction: row;
+	// 	// width: 500rpx;
+	// 	flex: 1;
+	// 	background-color: #f8f8f8;
+	// 	height: $nav-height;
+	// 	border-radius: 10px;
+	// 	padding: 0 15px;
+	// 	flex-wrap: nowrap;
+	// 	margin: 7px 0;
+	// 	line-height: $nav-height;
+	// }
+
+	// .input-uni-icon {
+	// 	line-height: $nav-height;
+	// }
+
+	// .nav-bar-input {
+	// 	height: $nav-height;
+	// 	line-height: $nav-height;
+	// 	/* #ifdef APP-PLUS-NVUE */
+	// 	width: 370rpx;
+	// 	/* #endif */
+	// 	padding: 0 5px;
+	// 	font-size: 12px;
+	// 	background-color: #f8f8f8;
+	// }
+</style>

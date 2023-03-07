@@ -1,0 +1,99 @@
+<!--
+ * @Author: sjeam
+ * @Date: 2023-02-01 17:06:43
+ * @Description: 
+-->
+<template>
+	<view class="container ">
+		<uni-nav-bar leftWidth="0rpx" rightWidth="0rpx" height="160rpx"  :fixed="true"   background-color="white" status-bar >
+			 <!-- right-text="搜索" @clickRight="search" -->
+			<uni-search-bar  class=" header_search" radius="5" placeholder="输入搜索关键词" clearButton="auto" cancelButton="none" @confirm="search" />
+	
+			<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true"   :show-scrollbar="false" :scroll-into-view="scrollInto">
+			    <view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
+			        <text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
+			    </view>
+			</scroll-view>
+
+		</uni-nav-bar>
+	</view>
+</template>
+ 
+<script>
+	// import tabBar from '@/pages/tabBar/component/tabbar.nvue';
+	export default {
+		// components: {tabBar},
+		props: {
+			tabIndex: {
+				type: Number,
+			},
+			tabBars: {
+				type: Object,
+			},
+			getList: {
+				type: Function  ,
+			},
+			goDetail: {
+				type: Function  ,
+			},
+			newGuid: {
+				type: Function  ,
+			},
+			ontabtap: {
+				type: Function  ,
+			},
+			ontabchange: {
+				type: Function  ,
+			},
+			switchTab: {
+				type: Function  ,
+			},
+			clearTabData: {
+				type: Function  ,
+			},
+			onrefresh: {
+				type: Function  ,
+			},									
+		},
+		data() {
+            return {
+                scrollInto: "",
+                showTips: false,
+                navigateFlag: false,
+                pulling: false,
+                refreshIcon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAB5QTFRFcHBw3Nzct7e39vb2ycnJioqK7e3tpqam29vb////D8oK7wAAAAp0Uk5T////////////ALLMLM8AAABxSURBVHja7JVBDoAgDASrjqj//7CJBi90iyYeOHTPMwmFZrHjYyyFYYUy1bwUZqtJIYVxhf1a6u0R7iUvWsCcrEtwJHp8MwMdvh2amHduiZD3rpWId9+BgPd7Cc2LIkPyqvlQvKxKBJ//Qwq/CacAAwDUv0a0YuKhzgAAAABJRU5ErkJggg=="
+            }
+		},
+		methods: {
+			back() {
+				uni.navigateBack({
+					delta: 1
+				})
+			},
+			search() {
+				uni.showToast({
+					title: '搜索事件'
+				})
+			},
+			confirm() {
+				uni.showToast({
+					title: '搜索'
+				})
+			}
+		},
+		ontabtap(e) {
+			    let index = e.target.dataset.current || e.currentTarget.dataset.current;
+			    this.switchTab(index);
+		},
+		onPullDownRefresh() {
+			console.log('onPullDownRefresh')
+			setTimeout(function() {
+				uni.stopPullDownRefresh()
+				console.log('stopPullDownRefresh')
+			}, 1000)
+		}
+	}
+</script>
+<style>
+	@import '../../../common/uni-header.css';
+</style>
