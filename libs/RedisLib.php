@@ -7,7 +7,7 @@ class RedisLib
     private function __construct(){
         self::$_instance = new Redis();
         // self::$_instance->connect('127.0.0.1','6379','5');
-        self::$_instance->connect('124.221.174.216', 6379);
+        self::$_instance->connect('124.222.234.123', 6379);
         self::$_instance->auth('yincan1993');
     }
     private function __clone(){}

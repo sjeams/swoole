@@ -1,8 +1,8 @@
 <?php
 //连接本地的 Redis 服务
 $redis = new Redis();
-// $redis->connect('124.221.174.216', 6379);
-$redis->connect('124.221.174.216', 6379);
+// $redis->connect('124.222.234.123', 6379);
+$redis->connect('124.222.234.123', 6379);
 $redis->auth('yincan1993');
 // $key='name';
 // $value="test";
